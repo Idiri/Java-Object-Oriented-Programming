@@ -1,8 +1,19 @@
+# Java Build Files
 *.class
+*.jar
+*.war
+*.ear
+
+# Project Metadata
 .project
 .classpath
 .settings/
 .idea/
 *.iml
 .vscode/
+bin/
+build/
+
+# Logs and Temp
 *.log
+tmp/
