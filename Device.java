@@ -2,7 +2,7 @@ abstract class Device{
     private String brand;
     protected boolean isOn;
 
-    Device(String brand){
+    public Device(String brand){
         this.brand = brand;
         this.isOn = false;
     }
@@ -10,7 +10,7 @@ abstract class Device{
     public void powerButton(){
         this.isOn = !this.isOn;
     }
-    abstract void displayStatus();
+    public abstract void displayStatus();
 
 
 }

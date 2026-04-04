@@ -1,8 +1,11 @@
 public class Dawg extends Animal{
-    int lives = 1;
+    private int lives = 1;
 
-    void speak(){
+    public void speak(){
         System.out.println("the dog goes woof!");
     }
+
+    public int getLives(){ return lives; }
+    public void setLives(int lives){ this.lives = lives; }
 
 }

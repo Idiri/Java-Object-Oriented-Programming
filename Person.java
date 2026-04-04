@@ -1,14 +1,17 @@
 public class Person{
 
-    String first;
-    String last;
+    private String first;
+    private String last;
 
-    Person(String first, String last){
+    public Person(String first, String last){
         this.first = first;
         this.last = last;
     }
 
-    void showName(){
+    public void showName(){
         System.out.println(this.first + " " + this.last);
     }
+
+    public String getFirst(){ return first; }
+    public String getLast(){ return last; }
 }

@@ -1,7 +1,10 @@
 public class Organism{
-    boolean isAlive;
+    private boolean isAlive;
 
-    Organism(){
+    public Organism(){
         isAlive = true;
     }
+
+    public boolean isAlive(){ return isAlive; }
+    public void setAlive(boolean isAlive){ this.isAlive = isAlive; }
 }

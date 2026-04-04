@@ -1,21 +1,23 @@
 public class Mage extends GameCharacter implements Healable{
     
-    int mana;
-    
+    private int mana;
+
     @Override
     public void heal(int amount){
-        this.health += amount;
-        System.out.println(name + " restored " + amount + " health! Current health is: " + health);
+        setHealth(getHealth() + amount);
+        System.out.println(getName() + " restored " + amount + " health! Current health is: " + getHealth());
     }
 
     @Override
-    void performAction(){
-        System.out.println(name + " casts a fireball!");
+    public void performAction(){
+        System.out.println(getName() + " casts a fireball!");
     }
 
-    Mage(String name, int level, double health, int mana){
+    public Mage(String name, int level, double health, int mana){
         super(name, level, health);
         this.mana = mana;
     }
+
+    public int getMana(){ return mana; }
     
 }

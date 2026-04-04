@@ -2,7 +2,7 @@ class SmartLight extends Device implements Adjustable{
 
     private int brightness;
 
-    SmartLight(String brand){
+    public SmartLight(String brand){
         super(brand);
     }
 
@@ -11,7 +11,7 @@ class SmartLight extends Device implements Adjustable{
     }
 
     @Override
-    void displayStatus() {
+    public void displayStatus() {
         if(isOn){
             System.out.println("Light is at " + brightness + " brightness");
         }

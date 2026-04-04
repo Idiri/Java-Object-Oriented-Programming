@@ -1,14 +1,16 @@
 public class Student extends Person{
     
-    double gpa;
-    
-    Student(String first, String last, double gpa){
+    private double gpa;
+
+    public Student(String first, String last, double gpa){
         super(first, last);
         this.gpa = gpa;
 
     }
 
-    void showGPA(){
-        System.out.println(this.first + "'s gpa is: " + this.gpa);
+    public void showGPA(){
+        System.out.println(getFirst() + "'s gpa is: " + this.gpa);
     }
+
+    public double getGpa(){ return gpa; }
 }

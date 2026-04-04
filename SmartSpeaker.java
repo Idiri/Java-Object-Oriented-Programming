@@ -1,7 +1,7 @@
 class SmartSpeaker extends Device implements Connectable, Adjustable{
     private int volume;
 
-    SmartSpeaker(String brand){
+    public SmartSpeaker(String brand){
         super(brand);
     }
 
@@ -12,7 +12,7 @@ class SmartSpeaker extends Device implements Connectable, Adjustable{
         System.out.println("Speaker connected to 5G.");
     };
     @Override
-    void displayStatus() {
+    public void displayStatus() {
         if(isOn){
             System.out.println("The device is ON" + "\n The volume is " + volume);
         }

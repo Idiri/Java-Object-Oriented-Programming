@@ -1,7 +1,7 @@
 public class Plant extends Organism{
     
 
-    void photosynthesize(){
+    public void photosynthesize(){
         System.out.println("The plant absorbs sunlight");
     }
 }

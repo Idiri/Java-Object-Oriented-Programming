@@ -1,15 +1,17 @@
 public class Friend{
 
-    static int numOfFriends;
-    String name;
+    private static int numOfFriends;
+    private String name;
 
-    Friend(String name){
+    public Friend(String name){
         this.name = name;
         numOfFriends++;
     }
-    static void showFriends(){
+    public static void showFriends(){
         System.out.println("You have " + numOfFriends + " friends");
     }
+
+    public String getName(){ return name; }
 
 
 
