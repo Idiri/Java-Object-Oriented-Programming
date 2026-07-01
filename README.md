@@ -1,166 +1,132 @@
 # Java Object-Oriented Programming
 
-A hands-on collection of Java programs built while learning OOP fundamentals. Each project demonstrates core concepts through practical, runnable examples — from a fantasy RPG to a smart home system to a role-based security model.
+A structured collection of Java OOP implementations, ranging from isolated concept exercises to full exam-simulation systems built under time constraints. The repository tracks a deliberate progression: single-concept demos → multi-class domain models → iterative exam re-attempts with visible refinement between sessions.
 
 ---
 
-## Concepts Covered
+## Repository Structure
 
-| Concept | Where to Find It |
-|---|---|
-| Encapsulation | `Person.java`, `Car.java`, `Student.java` |
-| Inheritance | `LectureExercises/`, `Employee.java`, `superclass.java` |
-| Polymorphism | `HeroGame.java`, `HomeMain.java` |
-| Abstract Classes | `GameCharacter.java`, `Device.java`, `SecurityProject/User.java` |
-| Interfaces | `Healable.java`, `Adjustable.java`, `Connectable.java`, `SecurityProject/Authorized.java` |
-| Method Overloading | `Overload.java` |
-| Custom Exceptions | `SecurityProject/SecurityBreachException.java` |
-| Exception Handling | `QuotientWithException.java`, `TestCircleWithException.java` |
-| File I/O | `ReadData.java`, `TestFileClass.java`, `TryWithResourceDemo.java` |
-| Collections (ArrayList) | `ArrayListDemo.java`, `SecurityProject/SecurityMain.java` |
+```
+src/
+├── ArrayOfObjects/          Arrays of custom objects, iteration patterns
+├── OverloadedConstructors/  Constructor overloading
+├── eksamensøving/           Exam practice sessions (NO) — draft/in-progress
+│   └── sesh1, sesh2, sesh5, sesh7   Iterative re-attempts of past exams
+├── exams/                   Exam practice sessions (NO) — cleaned/final
+│   └── session1, session2, session3, h2025, vr2025
+└── exercises/oop/           Concept-isolated exercises (EN), Bro Code course order
+```
+
+`eksamensøving` and `exams` model the same recurring problem sets. The former holds working drafts with syntax errors and stubs; the latter holds the refactored, compiling versions. Diffing the two shows the actual learning progression rather than just the end state.
 
 ---
 
-## Projects
+## Concept Coverage
 
-### Hero Game
-> Abstract classes + Interfaces + Polymorphism in a fantasy RPG
-
-**Files:** `GameCharacter.java`, `Warrior.java`, `Mage.java`, `Healable.java`, `HeroGame.java`
-
-`GameCharacter` is an **abstract class** that defines the template for all heroes — name, level, health, damage mechanics, and an abstract `performAction()`. `Warrior` and `Mage` each **extend** it and **implement** the `Healable` interface. `HeroGame` runs the simulation, treating all characters uniformly via polymorphism and using `instanceof` to safely cast before calling `heal()`.
-
-```
-GameCharacter (abstract)
-├── Warrior  implements Healable
-└── Mage     implements Healable
-```
-
-**Run:**
-```bash
-javac GameCharacter.java Healable.java Warrior.java Mage.java HeroGame.java
-java HeroGame
-```
-
-**Expected output:**
-```
---- The Adventure Begins ---
-Ragnar swings a massive sword!
-Merlin casts a fireball!
-
---- Combat and Healing ---
-Ragnar took a hit!
-Ragnar restored 15 health! Current health is: 85.0
-Merlin restored 15 health! Current health is: 115.0
-```
+| Concept | Primary Location | Notes |
+|---|---|---|
+| Encapsulation | `exercises/oop/getterSetter/`, `sesh1/Person.java` | Validated setters, private fields |
+| Multi-level inheritance | `exercises/oop/inheritance/`, `sesh1/`, `exams/` | `Organism → Animal → Dog/Cat`; `Person → Student/Ansatt` |
+| Abstract classes | `exams/session1/Dyr.java`, `exams/session2/Konto.java` | Abstract method contracts (`lagLyd()`, `utførTransaksjon()`) |
+| Interfaces | `sesh2/Kreditt.java`, `exercises/oop/interfaces/` | Single and multi-interface implementation |
+| Polymorphism | `exercises/oop/polymorphism/`, `exams/session1/` | Static array of base type, dynamic dispatch at runtime |
+| Constructor overloading | `OverloadedConstructors/User.java` | 0–3 parameter variants |
+| Custom exceptions | `oppgave2/BrukerFeil.java`, `sesh5/.../FeilInntastingUnntak.java` | Both extend `Exception` (checked) |
+| Multithreading | `oppg3/Timer.java`, `exams/session2/SaldoKalkulator.java` | See threading evolution below |
+| File I/O | `FilSkriverTraad.java`, `exercises/oop/*` | Thread-based file writes, `Scanner` file reads |
+| Collections | Most modules | `ArrayList`, `Collections.shuffle()`, lambda `removeIf` |
 
 ---
 
-### Smart Home
-> Multiple interface implementation + Abstract device hierarchy
+## Threading: Design Evolution
 
-**Files:** `Device.java`, `SmartLight.java`, `SmartSpeaker.java`, `Adjustable.java`, `Connectable.java`, `HomeMain.java`
+The codebase shows a deliberate shift in concurrency approach across sessions, not just repeated examples:
 
-`Device` is an **abstract class** with a `powerButton()` toggle and abstract `displayStatus()`. `SmartLight` implements `Adjustable` (controls brightness). `SmartSpeaker` implements both `Adjustable` (volume) and `Connectable` (WiFi). `HomeMain` iterates over devices and calls interface methods only after `instanceof` checks — a real-world pattern for working with mixed object types.
+| Stage | Location | Approach | Issue Addressed |
+|---|---|---|---|
+| Early | `eksamensøving/oppg3/Timer.java` | `extends Thread` | Ties the class to a single inheritance slot |
+| Mid | `exams/session2/SaldoKalkulator.java` | `extends Thread`, but with **work partitioning** across `Runtime.getRuntime().availableProcessors()` | Introduces parallel workload splitting on a fixed dataset (1000 accounts) |
+| Final | `sesh7/Eksamenvr2025Oppgave3.java`, `exercises/oop/multithreading/` | `implements Runnable` | Frees the class to extend something else later; matches idiomatic Java concurrency style |
 
-```
-Device (abstract)
-├── SmartLight   implements Adjustable
-└── SmartSpeaker implements Adjustable, Connectable
-```
-
-**Run:**
-```bash
-javac Device.java Adjustable.java Connectable.java SmartLight.java SmartSpeaker.java HomeMain.java
-java HomeMain
-```
+Same pattern for exception handling: `oppgave3/StudentAdministrasjonSystem` uses ad-hoc validation, while `sesh5/EksamenV2024Oppgave3.java` introduces a dedicated checked exception (`FeilInntastingUnntak`) plus a background search thread — the more defensive, production-shaped version of the same feature.
 
 ---
 
-### Security System
-> Role-based access control with a custom exception
+## Domain Models (Recurring Across Sessions)
 
-**Files:** `SecurityProject/`
+Two problem domains reappear 3–4 times each, reimplemented from scratch under exam conditions:
 
-`User` is an **abstract class** with private fields, encapsulated via getters/setters, and a `login()` method. `Admin` extends `User` and implements the `Authorized` interface, giving it access to a vault — protected by a **custom checked exception** (`SecurityBreachException`) when the wrong PIN is used. `Guest` inherits `User` but has no `Authorized` access. `SecurityMain` stores both in an `ArrayList` and processes them polymorphically.
+**University Administration** — `Person → Student / Ansatt`, with `Emne` (course) and `Karakter` (grade) as the association layer, aggregated in `Institutt`.
+- Draft versions (`eksamensøving/sesh1`, `sesh5`) use `ArrayList`.
+- Clean version (`exams/` top level) switches to fixed-size arrays with manual index counters — a constraint check, not a regression.
 
-```
-User (abstract)
-├── Admin  implements Authorized
-└── Guest
-```
-
-**Run:**
-```bash
-cd SecurityProject
-javac User.java Authorized.java SecurityBreachException.java Admin.java Guest.java SecurityMain.java
-java SecurityMain
-```
-
-**Expected output:**
-```
-Full System Access granted
-Attempting to open Alice's vault...
-SECURITY EVENT: CRITICAL: Unauthorized Vault Access Attempted!
-Accessing database... Logs decrypted
-----------------------
-Read only access
-Access Denied for: Bob
-----------------------
-```
+**Airline Booking** — `Flyselskap` aggregates `Flight`, `Booking`, and `kunde`/`Bedriftskunde` (customer hierarchy). Reimplemented in `exam2022/oppgave1` and cleanly in `exams/vr2025/oppgave1` under the renamed `Kunde/Firma` model.
 
 ---
 
-### Lecture Exercises
-> Basic inheritance and method overriding
+## Module Reference
 
-**Files:** `LectureExercises/Animal.java`, `Cat.java`, `Dog.java`, `Fish.java`
+### `exercises/oop/` — Concept Isolation (English)
 
-`Animal` defines a generic `move()` method. Each subclass overrides it with its own behavior. The simplest entry point for understanding the inheritance chain and `@Override`.
+One concept per folder, minimal surface area, inline explanatory comments.
 
-```
-Animal
-├── Cat   → "The cat is running"
-├── Dog   → "The dog is running"
-└── Fish  → "The fish is swimming"
-```
+| Folder | Concept | Example |
+|---|---|---|
+| `abstraxt/` | Abstract classes | `Shape → Circle, Rectangle, Triangle` |
+| `aggregation/` | Has-a, independent lifecycle | `Library` holds an externally-created `Book[]` |
+| `composition/` | Part-of, owned lifecycle | `Car` instantiates its own `Engine` internally |
+| `interfaces/` | Multiple interface implementation | `Fish implements Predator, Prey` |
+| `polymorphism/dynamic/` | Runtime dispatch | `Scanner`-driven type selection, `Animal` reference resolves to actual subtype |
+| `statix/` | Static state | `Friend` tracks count via static field/method |
+| `supahclass/` | `super()` chaining | `Person → Student/Employee` constructor delegation |
+| `threading/` | Background execution | Countdown thread vs. blocking `Scanner` read on main thread |
 
----
+### `exams/` — Refined Exam Solutions (Norwegian)
 
-## Standalone Demos
-
-| File | Demonstrates |
-|---|---|
-| `Person.java`, `Car.java`, `Student.java` | Constructors, fields, basic encapsulation |
-| `Employee.java`, `Main3.java` | Simple inheritance with `super()` |
-| `Overload.java` | Constructor overloading |
-| `superclass.java`, `Organism.java`, `Plant.java`, `Dawg.java` | Inheritance chains |
-| `ArrayListDemo.java` | `ArrayList` — add, loop, remove |
-| `QuotientWithIf.java` | Preventing division-by-zero without exceptions |
-| `QuotientWithException.java` | Handling division-by-zero with `try/catch` |
-| `TestCircleWithException.java` | Custom exception in a geometry context |
-| `InputMismatchExceptionDemo.java` | Catching bad user input |
-| `ReadData.java` | Reading a file with `Scanner` |
-| `TestFileClass.java` | Inspecting files with the `File` class |
-| `TryWithResourceDemo.java` | Try-with-resources for auto-closing streams |
+| Session | Problem | Key Classes |
+|---|---|---|
+| `session1` | Zoo / animal sounds | `Dyr` (abstract), `Løve`, `Tiger`, `Zookeeper` |
+| `session2` | Bank accounts, parallel balance sum | `Konto` (abstract), `Brukskonto`, `Sparekonto`, `SaldoKalkulator` |
+| `session3` | Shopping list | `Handleliste` |
+| `h2025/oppgave2` | Tournament group draw | `Turnering → Pulje → Lag → Kamp` |
+| `vr2025/oppgave1` | Customer/firm credit model | `Kunde`, `BedriftsKunde`, `Kreditt` |
+| `vr2025/oppgave3` | Threading benchmark (3-thread) | `Timer`, `ThreadTest` |
 
 ---
 
-## How to Compile & Run
+## Language Note
+
+Identifiers in `eksamensøving/` and `exams/` are in Norwegian — these mirror actual exam problem statements and are kept untranslated intentionally, to preserve fidelity with the source material. `exercises/oop/` is entirely in English.
+
+---
+
+## Build & Run
+
+No build tool — plain `javac`/`java`, no external dependencies.
 
 ```bash
-# Single file with a main()
+# Single file with main()
 javac FileName.java
 java FileName
 
-# Multiple dependent files
+# Multi-class module
 javac File1.java File2.java MainFile.java
 java MainFile
 
-# A subdirectory project (e.g. SecurityProject)
-cd SecurityProject
+# Subdirectory module (e.g. exams/session2)
+cd exams/session2
 javac *.java
-java SecurityMain
+java Main
 ```
 
-> Requires Java 11 or higher. No external dependencies.
+**Requirement:** JDK 11+.
+
+---
+
+## Status
+
+| Area | State |
+|---|---|
+| `exercises/oop/` | Stable — all files compile and run |
+| `exams/` | Stable — final/reviewed versions |
+| `eksamensøving/` | Draft — some files contain stubs or syntax errors by design (working history, not dead code) |
