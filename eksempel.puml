@@ -1,0 +1,20 @@
+@startuml
+
+class Sirkel {
+    + radius: double
+    + beregnAreal(): double
+    + beregnOmkrets(): double
+}
+
+class Kule {
+    + beregnVolum(): double
+}
+
+class SammenlignbarKule {
+    + compareTo(other: SammenlignbarKule): int
+}
+
+Sirkel <|-- Kule
+Kule <|-- SammenlignbarKule
+
+@enduml
